@@ -26,6 +26,7 @@ exports.createUser = async (req, resp) => {
         generatedPassword: password,
         creatorId,
       });
+      console.log(user)
       const result = await mailSender.sendEmail(user);
       resp.status(200).send(result);
     } catch (error) {

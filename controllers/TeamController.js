@@ -105,7 +105,7 @@ exports.deleteTeam = async (req, resp) => {
 
     resp.status(200).send(resultTeamDelete);
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     resp.status(500).send(error);
   }
 };
