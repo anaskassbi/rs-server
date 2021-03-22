@@ -5,7 +5,7 @@ config  = {
     MONGODB_URI : process.env.MONGODB_URI,
     EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
-    APPLICATION_URL: "https://research-activities.netlify.app"
+    APPLICATION_URL: "https://rs-client-seven.vercel.app/"
 }
 
 module.exports = config;
