@@ -10,8 +10,16 @@ const authorize = require("../helpers/authorize");
 const role = require("../helpers/role");
 const statisticsHelper = require("../helpers/statistics");
 const PhdStudentController = require("../controllers/PhdStudentController");
-
+const PvController = require("../controllers/PvController")
 const router = express.Router();
+
+
+
+/************PV endpoints********************/
+router.post("/pv", PvController.createPv);
+router.get("/pv", PvController.findAll);
+router.get("/pv/:_id",PvController.findPv);
+router.delete("/pv/:_id",PvController.deletePv);
 
 /************* Users endpoints ***********/
 router.post(
@@ -36,9 +44,10 @@ router.get(
   UserController.findAllUsers
 );
 
+
 router.delete(
   "/users/:_id",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
   UserController.deleteUser
 );
 
@@ -77,7 +86,7 @@ router.get(
 
 router.post(
   "/universities",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD]),
   UniversityController.createUniversity
 );
 
@@ -144,7 +153,7 @@ router.delete(
 
 router.get(
   "/establishments/:_id/laboratories",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD]),
   EstablishmentController.getEstablishmentLaboratories
 );
 
@@ -161,7 +170,7 @@ router.post(
 
 router.put(
   "/laboratories",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
   LaboratoryController.updateLaboratory
 );
 
@@ -169,7 +178,7 @@ router.get("/laboratories/:_id", LaboratoryController.findLaboratory);
 
 router.get(
   "/laboratories",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.RESEARCH_DIRECTOR]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.RESEARCH_DIRECTOR]),
   LaboratoryController.findAllLaboratories
 );
 
@@ -180,7 +189,7 @@ router.get(
 
 router.delete(
   "/laboratories/:_id",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
   LaboratoryController.deleteLaboratory
 );
 
@@ -200,19 +209,19 @@ router.get("/nodesForOrgChart", LaboratoryController.getNodesForOrgChart);
 /***************** Teams endpoints **************/
 router.post(
   "/teams",
-  authorize([role.CED_HEAD, role.VICE_CED_HEAD,role.LABORATORY_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
   TeamController.createTeam
 );
 
 router.put(
   "/teams",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
   TeamController.updateTeam
 );
 
 router.get(
   "/teams",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.TEAM_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.TEAM_HEAD]),
   TeamController.findAllTeams
 );
 
@@ -220,25 +229,25 @@ router.get("/teams/:_id", TeamController.findTeam);
 
 router.delete(
   "/teams/:_id",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.TEAM_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.TEAM_HEAD]),
   TeamController.deleteTeam
 );
 
 router.get(
   "/add-to-team/:team_id/:user_id",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.TEAM_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.TEAM_HEAD]),
   TeamController.addUserToTeam
 );
 
 router.get(
   "/remove-from-team/:team_id/:user_id",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.TEAM_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD, role.TEAM_HEAD]),
   TeamController.removeFromTeam
 );
 
 router.get(
   "/team-head-association/:team_id/:head_id",
-  authorize([role.CED_HEAD,role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
+  authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD]),
   TeamController.associateHeadToTeam
 );
 

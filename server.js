@@ -8,7 +8,6 @@ const mongoose = require("mongoose");
 const config = require("./config");
 const passport = require("passport");
 const path = require("path");
-
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -44,3 +43,5 @@ app.get("/test", (req, resp) => {
   const token = req.headers.authorization.split(" ")[1];
   resp.status(200).send(jwt.decode(token));
 });
+
+
