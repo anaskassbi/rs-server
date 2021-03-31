@@ -20,6 +20,20 @@ exports.findUserNotifications = async (req, resp) => {
   }
 };
 
+exports.findUserNotifications = async (req, resp) => {
+  try {
+    const notifications = await Notification.find({
+      user_id: req.params.user_id,
+      isRead: false,
+    });
+    resp.status(200).send(notifications);
+  } catch (error) {
+    console.log(error);
+    resp.status(500).send(error);
+  }
+};
+
+
 exports.notifyFolloweers = async (req, resp) => {
   try {
     const publication = req.body.publication;

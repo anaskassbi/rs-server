@@ -70,6 +70,8 @@ exports.findAllPhdStudents = async (req, resp) => {
   }
 };
 
+
+
 exports.deletePhdStudent = async (req, resp) => {
   try {
     const result = await PhdStudent.deleteOne({ _id: req.params._id });

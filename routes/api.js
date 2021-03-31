@@ -59,6 +59,14 @@ router.get("/laboratory-heads", UserController.getLaboratoryHeads);
 
 router.get("/researchers", UserController.getResearchers);
 
+router.get(
+  "/publications",
+  UserController.findAllPublications,
+  authorize([role.LABORATORY_HEAD]),
+
+);
+
+
 /**************** Followed users endpoints  ********/
 
 router.post("/follow", UserController.followUser);
@@ -280,10 +288,13 @@ router.get(
   EstablishmentController.getResearchDirector
 );
 
+
+
 router.post(
   "/research-director/:establishment_id/:user_id",
   EstablishmentController.changeResearchDirector
 );
+
 
 /***************** Phd students  endpoints **************/
 router.post(
