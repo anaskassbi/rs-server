@@ -22,6 +22,8 @@ router.get("/pv/:_id",PvController.findPv);
 router.delete("/pv/:_id",PvController.deletePv);
 
 /************* Users endpoints ***********/
+router.get("/users/lab/:_id", UserController.findPhdStudentOfLab);
+
 router.post(
   "/users",
   authorize([role.CED_HEAD, role.VICE_CED_HEAD, role.LABORATORY_HEAD]),

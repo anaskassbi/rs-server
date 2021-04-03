@@ -142,6 +142,16 @@ exports.findAllPublications = async ( req, resp)=>{
   }
 }
 
+exports.findPhdStudentOfLab = async ( req, resp)=>{
+  try{
+    const response = await User.find({creatorId: req.params._id});
+    resp.status(200).send(response);
+  }catch(error){
+    console.log(error);
+    resp.status(500).send(error);
+  }
+}
+
 
 exports.isFollowing = async (req, resp) => {
   const users = await FollowedUser.find({ authorId: req.params.authorId });
