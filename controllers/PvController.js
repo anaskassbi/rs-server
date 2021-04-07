@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 
 exports.findAll = async (req, resp) => {
     try {
-        const pv = await Pv.find();
+        const pv = await Pv.find({laboratory_id: mongoose.Types.ObjectId(req.params._id)});
         resp.status(200).send(pv);
     } catch (error) {
         console.log(error);

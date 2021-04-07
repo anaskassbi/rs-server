@@ -82,7 +82,7 @@ exports.deletePhdStudent = async (req, resp) => {
   }
 };
 
-async function getPhdStudentsOfLaboratory(laboratories, _id){
+async function getPhdStudentsOfLaboratory(laboratories, _id) {
   let teams;
   let members;
   let queryUsers;
@@ -92,7 +92,7 @@ async function getPhdStudentsOfLaboratory(laboratories, _id){
   teams = teams.map((team) => team._id);
   members = await TeamMemberShip.find({ team_id: { $in: teams } });
   members = members.map((member) => member.user_id);
-  queryUsers = [mongoose.Types.ObjectId(_id),...heads, ...members];
+  queryUsers = [mongoose.Types.ObjectId(_id), ...heads, ...members];
   let students = await PhdStudent.find({
     $or: [
       { supervisor: { $in: queryUsers } },
@@ -111,17 +111,17 @@ exports.findStudentsOfUser = async (req, resp) => {
     const { _id, roles } = req.user;
     let laboratories;
     let students;
-     if (roles && roles.includes(CED_HEAD) ) {
+    if (roles && roles.includes(CED_HEAD)) {
       const establishment = await Establishment.findOne({ _id: "5f40f53095de870017abef55" });
       laboratories = await Laboratory.find({ establishment_id: establishment._id });
       students = await getPhdStudentsOfLaboratory(laboratories, _id);
-      
-    }else if(roles && roles.includes(VICE_CED_HEAD) ) {
+
+    } else if (roles && roles.includes(VICE_CED_HEAD)) {
       const establishment = await Establishment.findOne({ _id: "5f40f53095de870017abef55" });
       laboratories = await Laboratory.find({ establishment_id: establishment._id });
       students = await getPhdStudentsOfLaboratory(laboratories, _id);
-      
-    }else if(roles && roles.includes(RESEARCH_DIRECTOR)){
+
+    } else if (roles && roles.includes(RESEARCH_DIRECTOR)) {
       const establishment = await Establishment.findOne({ research_director_id: _id });
       laboratories = await Laboratory.find({ establishment_id: establishment._id });
       students = await getPhdStudentsOfLaboratory(laboratories, _id);
@@ -131,6 +131,19 @@ exports.findStudentsOfUser = async (req, resp) => {
       students = await getPhdStudentsOfLaboratory(laboratories, _id);
     }
 
+    return resp.status(200).send({ students });
+  } catch (error) {
+    console.log("ERROR", error);
+    return resp.status(500).send(error);
+  }
+};
+
+exports.findStudentsOfLab = async (req, resp) => {
+  try {
+    const { _id, roles } = req.user;
+    const laboratories = await Laboratory.find({ head_id: _id });
+    const students = await getPhdStudentsOfLaboratory(laboratories, _id);
+    console.log(students.length)
     return resp.status(200).send({ students });
   } catch (error) {
     console.log("ERROR", error);

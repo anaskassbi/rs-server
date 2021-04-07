@@ -61,6 +61,7 @@ exports.findUser = async (req, resp) => {
     user_id: user._id,
     active: true,
   });
+  
   const phdStudents = await PhdStudent.find({
     supervisor: user._id,
   });
@@ -309,7 +310,6 @@ exports.getFilteringOptions = async (req, resp) => {
 
 
 
-  console.log(teams);
 
   const followedUsers = await FollowedUser.find();
   const followedUsersIds = followedUsers.map(({ user_id }) => user_id);

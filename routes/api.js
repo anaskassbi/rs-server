@@ -17,9 +17,9 @@ const router = express.Router();
 
 /************PV endpoints********************/
 router.post("/pv", PvController.createPv);
-router.get("/pv", PvController.findAll);
-router.get("/pv/:_id",PvController.findPv);
-router.delete("/pv/:_id",PvController.deletePv);
+router.get("/pv/:_id", PvController.findAll);
+router.get("/pv/:_id", PvController.findPv);
+router.delete("/pv/:_id", PvController.deletePv);
 
 /************* Users endpoints ***********/
 router.get("/users/lab/:_id", UserController.findPhdStudentOfLab);
@@ -65,7 +65,6 @@ router.get(
   "/publications",
   UserController.findAllPublications,
   authorize([role.LABORATORY_HEAD]),
-
 );
 
 
@@ -299,6 +298,8 @@ router.post(
 
 
 /***************** Phd students  endpoints **************/
+router.get("/phdStudentsLabs",PhdStudentController.findStudentsOfLab)
+
 router.post(
   "/phdStudents",
   PhdStudentController.createPhdStudent
@@ -313,10 +314,6 @@ router.get(
   PhdStudentController.findPhdStudent
 );
 
-router.get(
-  "/phdStudentsOfUser/",
-  PhdStudentController.findStudentsOfUser
-);
 
 router.get(
   "/phdStudents",
