@@ -6,18 +6,18 @@ const pvSchema = new Schema({
       type: String
     },
     date: { type: Date, default: Date.now },
-    annexe:
+    annexe:[
     {
         data: Buffer,
         contentType: String,
-        nom:String
-    },
-    rapport:
+        name:String
+    }],
+    rapport:[
     {
         data: Buffer,
         contentType: String,
-        nom:String
-    },
+        name:String
+    }],
     laboratory_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Laboratory",
