@@ -10,13 +10,16 @@ const pvSchema = new Schema({
     {
         data: Buffer,
         contentType: String,
-        name:String
+        name:String,
+        mimetype:String
+
     }],
     rapport:[
     {
         data: Buffer,
         contentType: String,
-        name:String
+        name:String,
+        mimetype:String
     }],
     laboratory_id: {
       type: mongoose.Schema.Types.ObjectId,

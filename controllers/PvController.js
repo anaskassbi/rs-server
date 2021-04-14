@@ -71,8 +71,18 @@ exports.createPv = async (req, resp) => {
 
 exports.findPv = async (req, resp) => {
     try {
+        var file={};
+        console.log(req.params._id)
+        console.log(req.params._doc)
         const pv = await Pv.findById(req.params._id);
-        resp.status(200).send(pv);
+        var docs = pv.rapport.concat(pv.annexe)
+        docs.forEach((doc)=>{
+            if(doc._id==req.params._doc){
+                file=doc;
+            }
+        })
+        console.log(file)
+        resp.status(200).send(file);
     } catch (error) {
         console.log(error);
         resp.status(500).send(error);

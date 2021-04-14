@@ -15,10 +15,11 @@ const router = express.Router();
 
 
 
+
 /************PV endpoints********************/
 router.post("/pv", PvController.createPv);
 router.get("/pv/:_id", PvController.findAll);
-router.get("/pv/:_id", PvController.findPv);
+router.get("/pv/doc/:_id/:_doc", PvController.findPv);
 router.delete("/pv/:_id", PvController.deletePv);
 
 /************* Users endpoints ***********/
