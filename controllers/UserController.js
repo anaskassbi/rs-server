@@ -267,8 +267,7 @@ exports.getResearchers = async (req, resp) => {
 exports.updateProfilePicture = async (req, resp) => {
   let file = req.files.file;
   let user = userHelper.requesterUser(req);
-  file.name= user._id
-  
+ 
   User.updateOne({ _id: user._id }, { $set: { profilePicture: file } })
   .then((done) => {
     resp.status(200).send({ message: "file uploaded", profilePicture: file });
