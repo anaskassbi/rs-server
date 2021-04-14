@@ -267,16 +267,7 @@ exports.getResearchers = async (req, resp) => {
 exports.updateProfilePicture = async (req, resp) => {
   let file = req.files.file;
   let user = userHelper.requesterUser(req);
- 
-  User.updateOne({ _id: user._id }, { $set: { profilePicture: file } })
-  .then((done) => {
-    resp.status(200).send({ message: "file uploaded", profilePicture: file });
-  })
-  .catch((error) => {
-    resp.status(500).send(error);
-  });
-
-  /*let userFromDB = await User.findById(user._id, "profilePicture");
+  let userFromDB = await User.findById(user._id, "profilePicture");
   if (userFromDB.profilePicture !== undefined && userFromDB.profilePicture !== "default.png") {
     fs.unlink(__dirname + "/../public/images/" + userFromDB.profilePicture, (err) => {
       if (err) resp.status(500).send(err);
@@ -296,7 +287,7 @@ exports.updateProfilePicture = async (req, resp) => {
           resp.status(500).send(error);
         });
     }
-  });*/
+  });
 };
 
 exports.getFilteringOptions = async (req, resp) => {
@@ -316,6 +307,9 @@ exports.getFilteringOptions = async (req, resp) => {
       laboratory_id: laboratory._id,
     });
   }
+
+
+
 
   const followedUsers = await FollowedUser.find();
   const followedUsersIds = followedUsers.map(({ user_id }) => user_id);
