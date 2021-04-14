@@ -30,9 +30,7 @@ exports.updateTeam = async (req, resp) => {
 
 exports.findTeam = async (req, resp) => {
   try {
-    console.log(req.params._id)
     const team = await Team.findById(req.params._id);
-    console.log(team)
     const laboratory = await Laboratory.findById(team.laboratory_id);
     const establishment = await Establishment.findById(
       laboratory.establishment_id

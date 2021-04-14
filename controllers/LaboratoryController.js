@@ -28,15 +28,6 @@ exports.updateLaboratory = async (req, resp) => {
   }
 };
 
-exports.updateLaboratory = async (req, resp) => {
-  try {
-    const result = await Laboratory.updateOne({ _id: req.body._id }, { $set: req.body });
-    resp.status(200).send(result);
-  } catch (error) {
-    console.log(error);
-    resp.status(500).send(error);
-  }
-};
 exports.findLaboratory = async (req, resp) => {
   try {
     const laboratory = await Laboratory.findById(req.params._id);

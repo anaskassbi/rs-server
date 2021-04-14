@@ -11,6 +11,7 @@ const differentRoles = require("../helpers/role");
 const userHelper = require("../helpers/user-helper");
 const PhdStudent = require("../models/phdStudent");
 const Establishment = require("../models/establishment");
+const TeamMembership = require("../models/team-membership");
 
 exports.createUser = async (req, resp) => {
   const { email, password, roles, creatorId } = req.body;
@@ -86,6 +87,24 @@ exports.findAllUsers = async (req, resp) => {
   try {
     const users = await User.find().select("-password");
     resp.status(200).send(users);
+  } catch (error) {
+    console.log(error);
+    resp.status(500).send(error);
+  }
+};
+
+
+exports.findAllUsersByLab = async (req, resp) => {
+  try {
+    let labId = req.params.labId;
+    let teams = await Team.find({ laboratory_id: labId })
+    teams = teams.map((team) => team._id);
+    let membersOfLab =  await TeamMemberShip.find({team_id: { $in: teams }});
+    membersOfLab = membersOfLab.map((member)=>{return member.user_id})
+    
+    const members = await User.find({_id: {$in : membersOfLab}})
+
+    resp.status(200).send(members);
   } catch (error) {
     console.log(error);
     resp.status(500).send(error);
