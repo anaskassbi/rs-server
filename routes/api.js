@@ -36,6 +36,7 @@ router.put("/users", UserController.updateUser);
 router.get("/users/:_id", UserController.findUser);
 router.get("/labUsers/:labId",UserController.findAllUsersByLab)
 
+
 router.get(
   "/users",
   authorize([
