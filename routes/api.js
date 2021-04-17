@@ -300,8 +300,8 @@ router.post(
 
 
 /***************** Phd students  endpoints **************/
-router.get("/phdStudentsLabs",PhdStudentController.findStudentsOfLab)
-
+router.get("/phdStudentsLabs",PhdStudentController.findStudentsOfLab);
+router.get("/phdStudentsOfUser",PhdStudentController.findStudentsOfUser);
 router.post(
   "/phdStudents",
   PhdStudentController.createPhdStudent

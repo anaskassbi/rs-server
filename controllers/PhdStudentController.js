@@ -108,6 +108,7 @@ async function getPhdStudentsOfLaboratory(laboratories, _id) {
 
 exports.findStudentsOfUser = async (req, resp) => {
   try {
+    console.log("findStudentsOfUser======================")
     const { _id, roles } = req.user;
     let laboratories;
     let students;
