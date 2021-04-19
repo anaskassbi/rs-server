@@ -1,8 +1,5 @@
 const Pv = require("../models/pv");
-const fs = require('fs');
-const Grid = require("gridfs-stream");
 require('../server.js'); 
-const path = require('path')
 var mongoose = require('mongoose');
 
 exports.findAll = async (req, resp) => {
@@ -32,25 +29,6 @@ exports.createPv = async (req, resp) => {
         }
     })
 
-    rapports.forEach((rap) => {
-        let rapportUrl = rap.name;
-        let rapportPath = __dirname + "/../pvs/" + rapportUrl;
-        rap.mv(rapportPath, function (err) {
-            if (err) {
-                console.log(err);
-            }
-        });
-    })
-
-    annexes.forEach((an) => {
-        let annexeUrl = an.name;
-        let annexePath = __dirname + "/../pvs/" + annexeUrl;
-        an.mv(annexePath, function (err) {
-            if (err) {
-                console.log(err);
-            }
-        });
-    })
 
     try {
 
