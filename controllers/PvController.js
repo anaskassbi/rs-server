@@ -1,6 +1,7 @@
 const Pv = require("../models/pv");
 require('../server.js'); 
 var mongoose = require('mongoose');
+const firebase = require('../helpers/firebase')
 
 exports.findAll = async (req, resp) => {
     try {
@@ -28,6 +29,26 @@ exports.createPv = async (req, resp) => {
             annexes.push(file)
         }
     })
+
+    /*
+    const blob = firebase.bucket.file(rapports[0]);
+    const blobWriter = blob.createWriteStream({
+        metadata: {
+            contentType: rapports[0].mimetype
+        }
+    });
+
+    blobWriter.on('error', (err) => {
+        console.log(err)
+    })
+
+    blobWriter.on('finish', () => {
+        //res.status(200).send("File uploaded.")
+        console.log("file uploaded ============>")
+    })
+
+    blobWriter.end(rapports[0].buffer)
+*/
 
 
     try {
