@@ -309,6 +309,64 @@ exports.updateProfilePicture = async (req, resp) => {
   });
 };
 
+
+
+
+
+exports.addPub = async ( req, resp)=>{
+  const { idAuthor, title, year,citation,source,IF,SJR } = req.body;
+  if (citation==""){
+    citation=0;
+  }
+  
+  try{
+    const Author = await FollowedUser.findOne({user_id:idAuthor});
+    console.log(Author.publications);
+    const authors=[];
+    authors.push(Author.name);
+    var obj = {
+      authors,
+      title,
+      year,
+      citation,
+      source,
+      IF,
+      SJR,
+  } 
+  console.log(obj)
+    const response= await Author.update({$push:{publications:obj}})
+    console.log(response)
+    resp.status(200).send(response);
+  }catch(error){
+    console.log(error);
+    resp.status(500).send(error);
+  }
+}
+
+
+
+exports.deletePub = async ( req, resp)=>{
+  const { idAuthor,idPub } = req.body;
+ 
+  
+  try{
+    const Author = await FollowedUser.findOne({user_id:idAuthor});
+    console.log(Author.publications);
+   
+    
+ 
+    const response= await Author.update({$pull:{publications:{_id:idPub}}})
+    console.log(response)
+    resp.status(200).send(response);
+  }catch(error){
+    console.log(error);
+    resp.status(500).send(error);
+  }
+}
+
+
+
+
 exports.getFilteringOptions = async (req, resp) => {
   const user_id = req.params.laboratoryHeadId;
   let teams = [];

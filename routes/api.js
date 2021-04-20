@@ -31,6 +31,14 @@ router.post(
   UserController.createUser
 );
 
+router.post(
+  "/add-pub",UserController.addPub
+);
+
+router.post(
+  "/delete-pub",UserController.deletePub
+);
+
 router.put("/users", UserController.updateUser);
 
 router.get("/users/:_id", UserController.findUser);
