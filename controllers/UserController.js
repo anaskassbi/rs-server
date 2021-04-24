@@ -27,7 +27,6 @@ exports.createUser = async (req, resp) => {
         generatedPassword: password,
         creatorId,
       });
-      console.log(user)
       const result = await mailSender.sendEmail(user);
       resp.status(200).send(result);
     } catch (error) {
@@ -333,9 +332,7 @@ exports.addPub = async ( req, resp)=>{
       IF,
       SJR,
   } 
-  console.log(obj)
     const response= await Author.update({$push:{publications:obj}})
-    console.log(response)
     resp.status(200).send(response);
   }catch(error){
     console.log(error);
@@ -352,11 +349,8 @@ exports.deletePub = async ( req, resp)=>{
   try{
     const Author = await FollowedUser.findOne({user_id:idAuthor});
     console.log(Author.publications);
-   
-    
- 
+
     const response= await Author.update({$pull:{publications:{_id:idPub}}})
-    console.log(response)
     resp.status(200).send(response);
   }catch(error){
     console.log(error);

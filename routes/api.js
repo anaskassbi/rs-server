@@ -21,7 +21,9 @@ router.post("/pv", PvController.createPv);
 router.get("/pv/:_id", PvController.findAll);
 router.get("/pv/doc/:_id/:_doc", PvController.findPv);
 router.delete("/pv/:_id", PvController.deletePv);
-
+router.post("/pv/removeElement",PvController.removeElement)
+router.post("/pv/dragDrop",PvController.dragDropElement)
+router.get("/pv/findOne/:_id",PvController.findPvById)
 /************* Users endpoints ***********/
 router.get("/users/lab/:_id", UserController.findPhdStudentOfLab);
 

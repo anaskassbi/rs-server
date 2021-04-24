@@ -1,5 +1,5 @@
 const Pv = require("../models/pv");
-require('../server.js'); 
+require('../server.js');
 var mongoose = require('mongoose');
 const firebase = require('../helpers/firebase')
 
@@ -20,7 +20,7 @@ exports.createPv = async (req, resp) => {
 
     var rapports = new Array();
     var annexes = new Array();
-    
+
     keys.forEach((key) => {
         var file = files[key];
         if (file.mimetype == "application/pdf") {
@@ -68,16 +68,81 @@ exports.createPv = async (req, resp) => {
 
 }
 
+exports.removeElement = async (req, resp) => {
+    const { type, racine, element } = req.body;
+    console.log("removeElement " + racine + "   " + element);
+    var resultPvDelete;
+    try {
+        if (type == "rapport") {
+            resultPvDelete = await Pv.updateOne({ _id: racine }, { $pull: { "rapport": { _id: element } } })
+        } else {
+            resultPvDelete = await Pv.updateOne({ _id: racine }, { $pull: { "annexe": { _id: element } } })
+        }
+        resp.status(200).send(resultPvDelete);
+    } catch (error) {
+        console.log(error);
+        resp.status(500).send(error);
+    }
+}
+
+exports.findPvById = async (req, resp) => {
+    try {
+        const draggedElement = await Pv.findOne({ _id: req.params._id })
+        resp.status(200).send(draggedElement);
+
+    } catch (error) {
+        console.log(error);
+        resp.status(500).send(error);
+    }
+}
+
+
+exports.dragDropElement = async (req, resp) => {
+    const { type, racineSrc, elementSrc, racineDest } = req.body;
+    try {
+        const draggedElement = await Pv.findOne({ _id: racineSrc })
+
+        if (type == "annexe") {
+            files = draggedElement.annexe;
+
+        } else {
+            files = draggedElement.rapport;
+
+        }
+
+        var file;
+        files.forEach((e) => {
+            if (e._id == elementSrc)
+                file = e;
+        })
+
+        var resultPull;
+        var resultPush;
+        if (type == "annexe") {
+            resultPull = await Pv.updateOne({ _id: racineSrc }, { $pull: { "annexe": { _id: elementSrc } } })
+            resultPush = await Pv.updateOne({ _id: racineDest }, { $push: { "annexe": file } })
+        } else {
+            resultPull = await Pv.updateOne({ _id: racineSrc }, { $pull: { "rapport": { _id: elementSrc } } })
+            resultPush = await Pv.updateOne({ _id: racineDest }, { $push: { "rapport": file } })
+        }
+        resp.status(200).send({ resultPull, resultPush });
+
+    } catch (error) {
+        console.log(error);
+        resp.status(500).send(error);
+    }
+}
+
 exports.findPv = async (req, resp) => {
     try {
-        var file={};
+        var file = {};
         console.log(req.params._id)
         console.log(req.params._doc)
         const pv = await Pv.findById(req.params._id);
         var docs = pv.rapport.concat(pv.annexe)
-        docs.forEach((doc)=>{
-            if(doc._id==req.params._doc){
-                file=doc;
+        docs.forEach((doc) => {
+            if (doc._id == req.params._doc) {
+                file = doc;
             }
         })
         console.log(file)
