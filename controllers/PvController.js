@@ -70,7 +70,6 @@ exports.createPv = async (req, resp) => {
 
 exports.removeElement = async (req, resp) => {
     const { type, racine, element } = req.body;
-    console.log("removeElement " + racine + "   " + element);
     var resultPvDelete;
     try {
         if (type == "rapport") {
@@ -96,41 +95,16 @@ exports.findPvById = async (req, resp) => {
     }
 }
 
-
-exports.dragDropElement = async (req, resp) => {
-    const { type, racineSrc, elementSrc, racineDest } = req.body;
-    try {
-        const draggedElement = await Pv.findOne({ _id: racineSrc })
-
-        if (type == "annexe") {
-            files = draggedElement.annexe;
-
-        } else {
-            files = draggedElement.rapport;
-
-        }
-
-        var file;
-        files.forEach((e) => {
-            if (e._id == elementSrc)
-                file = e;
-        })
-
-        var resultPull;
-        var resultPush;
-        if (type == "annexe") {
-            resultPull = await Pv.updateOne({ _id: racineSrc }, { $pull: { "annexe": { _id: elementSrc } } })
-            resultPush = await Pv.updateOne({ _id: racineDest }, { $push: { "annexe": file } })
-        } else {
-            resultPull = await Pv.updateOne({ _id: racineSrc }, { $pull: { "rapport": { _id: elementSrc } } })
-            resultPush = await Pv.updateOne({ _id: racineDest }, { $push: { "rapport": file } })
-        }
-        resp.status(200).send({ resultPull, resultPush });
-
-    } catch (error) {
-        console.log(error);
-        resp.status(500).send(error);
+exports.pushFile= async (req, resp) => {
+    const {type,racineDestination}=req.body;
+    const file = req.files.file;
+    var resultPush;
+    if (type == "annexe") {
+        resultPush = await Pv.updateOne({ _id: racineDestination }, { $push: { "annexe": file } })
+    } else {
+        resultPush = await Pv.updateOne({ _id: racineDestination }, { $push: { "rapport": file } })
     }
+    resp.status(200).send(resultPush );
 }
 
 exports.findPv = async (req, resp) => {
