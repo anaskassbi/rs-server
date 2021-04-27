@@ -41,6 +41,9 @@ router.post(
 router.post(
   "/delete-pub",UserController.deletePub
 );
+router.post(
+  "/update-citation",UserController.updateCitation
+);
 
 router.put("/users", UserController.updateUser);
 

@@ -361,6 +361,32 @@ exports.deletePub = async ( req, resp)=>{
 
 
 
+
+exports.updateCitation = async ( req, resp)=>{
+  console.log(req.body.user_id);
+
+  
+  try{
+    const Author = await FollowedUser.findOne({authorId:req.body.authorId});
+    console.log(Author);
+    
+    
+    
+
+
+
+    const response= await Author.update({$set:{citationsPerYear:req.body.citationsPerYear,indexes:req.body.indexes,coauthors: req.body.coauthors}})
+    resp.status(200).send(response);
+  }catch(error){
+    console.log(error);
+    resp.status(500).send(error);
+  }
+}
+
+
+
+
+
 exports.getFilteringOptions = async (req, resp) => {
   const user_id = req.params.laboratoryHeadId;
   let teams = [];
