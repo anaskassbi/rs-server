@@ -17,39 +17,17 @@ exports.findAll = async (req, resp) => {
 exports.createPv = async (req, resp) => {
     var files = req.files;
     var keys = Object.keys(files);
-
     var rapports = new Array();
     var annexes = new Array();
 
     keys.forEach((key) => {
         var file = files[key];
-        if (file.mimetype == "application/pdf") {
+        if ((key=="rapport")&&((file.mimetype == "application/pdf")|| (file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))) {
             rapports.push(file);
-        } else if (file.mimetype == "application/vnd.ms-excel" || file.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        } else {
             annexes.push(file)
         }
     })
-
-    /*
-    const blob = firebase.bucket.file(rapports[0]);
-    const blobWriter = blob.createWriteStream({
-        metadata: {
-            contentType: rapports[0].mimetype
-        }
-    });
-
-    blobWriter.on('error', (err) => {
-        console.log(err)
-    })
-
-    blobWriter.on('finish', () => {
-        //res.status(200).send("File uploaded.")
-        console.log("file uploaded ============>")
-    })
-
-    blobWriter.end(rapports[0].buffer)
-*/
-
 
     try {
 
@@ -110,8 +88,6 @@ exports.pushFile= async (req, resp) => {
 exports.findPv = async (req, resp) => {
     try {
         var file = {};
-        console.log(req.params._id)
-        console.log(req.params._doc)
         const pv = await Pv.findById(req.params._id);
         var docs = pv.rapport.concat(pv.annexe)
         docs.forEach((doc) => {
@@ -119,7 +95,6 @@ exports.findPv = async (req, resp) => {
                 file = doc;
             }
         })
-        console.log(file)
         resp.status(200).send(file);
     } catch (error) {
         console.log(error);

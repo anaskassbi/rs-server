@@ -31,8 +31,11 @@ const UserSchema = new Schema({
     required: false,
   },
   profilePicture: {
-    type: String,
-    required: false,
+    data: Buffer,
+    contentType: String,
+    name: String,
+    mimetype: String
+
   },
   creatorId: {
     type: mongoose.Schema.Types.ObjectId,

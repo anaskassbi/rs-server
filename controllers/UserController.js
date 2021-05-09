@@ -61,7 +61,7 @@ exports.findUser = async (req, resp) => {
     user_id: user._id,
     active: true,
   });
-  
+
   const phdStudents = await PhdStudent.find({
     supervisor: user._id,
   });
@@ -98,10 +98,10 @@ exports.findAllUsersByLab = async (req, resp) => {
     let labId = req.params.labId;
     let teams = await Team.find({ laboratory_id: labId })
     teams = teams.map((team) => team._id);
-    let membersOfLab =  await TeamMemberShip.find({team_id: { $in: teams }});
-    membersOfLab = membersOfLab.map((member)=>{return member.user_id})
-    
-    const members = await User.find({_id: {$in : membersOfLab}})
+    let membersOfLab = await TeamMemberShip.find({ team_id: { $in: teams } });
+    membersOfLab = membersOfLab.map((member) => { return member.user_id })
+
+    const members = await User.find({ _id: { $in: membersOfLab } })
 
     resp.status(200).send(members);
   } catch (error) {
@@ -151,21 +151,21 @@ exports.unfollowUser = async (req, resp) => {
   }
 };
 
-exports.findAllPublications = async ( req, resp)=>{
-  try{
+exports.findAllPublications = async (req, resp) => {
+  try {
     const response = await FollowedUser.find();
     resp.status(200).send(response);
-  }catch(error){
+  } catch (error) {
     console.log(error);
     resp.status(500).send(error);
   }
 }
 
-exports.findPhdStudentOfLab = async ( req, resp)=>{
-  try{
-    const response = await User.find({creatorId: req.params._id});
+exports.findPhdStudentOfLab = async (req, resp) => {
+  try {
+    const response = await User.find({ creatorId: req.params._id });
     resp.status(200).send(response);
-  }catch(error){
+  } catch (error) {
     console.log(error);
     resp.status(500).send(error);
   }
@@ -219,7 +219,7 @@ exports.getFollowedUsers = async (req, resp) => {
 
     const followedUsersAcounts = await Promise.all(teamsMemberShips.flatMap((t) => t).map(({ user_id }) => User.findById(user_id)));
 
-    const result = followedUsersAcounts.map(({ firstName, lastName,roles }, index) => ({
+    const result = followedUsersAcounts.map(({ firstName, lastName, roles }, index) => ({
       ...followedUsers[index]._doc,
       firstName,
       lastName,
@@ -286,7 +286,19 @@ exports.getResearchers = async (req, resp) => {
 exports.updateProfilePicture = async (req, resp) => {
   let file = req.files.file;
   let user = userHelper.requesterUser(req);
-  let userFromDB = await User.findById(user._id, "profilePicture");
+  file.name= user._id;
+
+  //let userFromDB = await User.findById(user._id, "profilePicture");
+  console.log(file)
+  User.updateOne({ _id: user._id }, { $set: { profilePicture: file } })
+    .then((done) => {
+      resp.status(200).send({ message: "file uploaded", profilePicture: file });
+    })
+    .catch((error) => {
+      console.log(error)
+      resp.status(500).send(error);
+    });
+  /*
   if (userFromDB.profilePicture !== undefined && userFromDB.profilePicture !== "default.png") {
     fs.unlink(__dirname + "/../public/images/" + userFromDB.profilePicture, (err) => {
       if (err) resp.status(500).send(err);
@@ -306,23 +318,23 @@ exports.updateProfilePicture = async (req, resp) => {
           resp.status(500).send(error);
         });
     }
-  });
+  });*/
 };
 
 
 
 
 
-exports.addPub = async ( req, resp)=>{
-  const { idAuthor, title, year,citation,source,IF,SJR } = req.body;
-  if (citation==""){
-    citation=0;
+exports.addPub = async (req, resp) => {
+  const { idAuthor, title, year, citation, source, IF, SJR } = req.body;
+  if (citation == "") {
+    citation = 0;
   }
-  
-  try{
-    const Author = await FollowedUser.findOne({user_id:idAuthor});
+
+  try {
+    const Author = await FollowedUser.findOne({ user_id: idAuthor });
     console.log(Author.publications);
-    const authors=[];
+    const authors = [];
     authors.push(Author.name);
     var obj = {
       authors,
@@ -332,10 +344,10 @@ exports.addPub = async ( req, resp)=>{
       source,
       IF,
       SJR,
-  } 
-    const response= await Author.update({$push:{publications:obj}})
+    }
+    const response = await Author.update({ $push: { publications: obj } })
     resp.status(200).send(response);
-  }catch(error){
+  } catch (error) {
     console.log(error);
     resp.status(500).send(error);
   }
@@ -343,17 +355,17 @@ exports.addPub = async ( req, resp)=>{
 
 
 
-exports.deletePub = async ( req, resp)=>{
-  const { idAuthor,idPub } = req.body;
- 
-  
-  try{
-    const Author = await FollowedUser.findOne({user_id:idAuthor});
+exports.deletePub = async (req, resp) => {
+  const { idAuthor, idPub } = req.body;
+
+
+  try {
+    const Author = await FollowedUser.findOne({ user_id: idAuthor });
     console.log(Author.publications);
 
-    const response= await Author.update({$pull:{publications:{_id:idPub}}})
+    const response = await Author.update({ $pull: { publications: { _id: idPub } } })
     resp.status(200).send(response);
-  }catch(error){
+  } catch (error) {
     console.log(error);
     resp.status(500).send(error);
   }
@@ -363,22 +375,22 @@ exports.deletePub = async ( req, resp)=>{
 
 
 
-exports.updateCitation = async ( req, resp)=>{
+exports.updateCitation = async (req, resp) => {
   console.log(req.body.user_id);
 
-  
-  try{
-    const Author = await FollowedUser.findOne({authorId:req.body.authorId});
+
+  try {
+    const Author = await FollowedUser.findOne({ authorId: req.body.authorId });
     console.log(Author);
-    
-    
-    
 
 
 
-    const response= await Author.update({$set:{citationsPerYear:req.body.citationsPerYear,indexes:req.body.indexes,coauthors: req.body.coauthors}})
+
+
+
+    const response = await Author.update({ $set: { citationsPerYear: req.body.citationsPerYear, indexes: req.body.indexes, coauthors: req.body.coauthors } })
     resp.status(200).send(response);
-  }catch(error){
+  } catch (error) {
     console.log(error);
     resp.status(500).send(error);
   }
@@ -395,7 +407,7 @@ exports.getFilteringOptions = async (req, resp) => {
     head_id: user_id,
   });
 
-  
+
   if (!laboratory) {
     teams = await Team.find({
       head_id: user_id,
@@ -461,12 +473,12 @@ exports.getFilteringOptions = async (req, resp) => {
 
 exports.getDirectorFilteringOptions = async (req, resp) => {
   const user_id = req.params.user_id;
-  let establishment = await Establishment.findOne({research_director_id: user_id});
-  let laboratories = await Laboratory.find({establishment_id: establishment._id});
+  let establishment = await Establishment.findOne({ research_director_id: user_id });
+  let laboratories = await Laboratory.find({ establishment_id: establishment._id });
 
   let teams = [];
-  for(let lab of laboratories){
-    let innerTeams = await Team.find({laboratory_id: lab._id});
+  for (let lab of laboratories) {
+    let innerTeams = await Team.find({ laboratory_id: lab._id });
     teams = [...teams, ...innerTeams];
   }
 
