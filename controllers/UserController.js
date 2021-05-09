@@ -223,7 +223,8 @@ exports.getFollowedUsers = async (req, resp) => {
       ...followedUsers[index]._doc,
       firstName,
       lastName,
-      roles
+      roles,
+      profilePicture
     }));
     resp.status(200).send(result);
   }
@@ -286,10 +287,8 @@ exports.getResearchers = async (req, resp) => {
 exports.updateProfilePicture = async (req, resp) => {
   let file = req.files.file;
   let user = userHelper.requesterUser(req);
-  file.name= user._id;
+  file.name = user._id;
 
-  //let userFromDB = await User.findById(user._id, "profilePicture");
-  console.log(file)
   User.updateOne({ _id: user._id }, { $set: { profilePicture: file } })
     .then((done) => {
       resp.status(200).send({ message: "file uploaded", profilePicture: file });
@@ -298,27 +297,6 @@ exports.updateProfilePicture = async (req, resp) => {
       console.log(error)
       resp.status(500).send(error);
     });
-  /*
-  if (userFromDB.profilePicture !== undefined && userFromDB.profilePicture !== "default.png") {
-    fs.unlink(__dirname + "/../public/images/" + userFromDB.profilePicture, (err) => {
-      if (err) resp.status(500).send(err);
-    });
-  }
-
-  let fileUrl = user._id + file.name;
-  let filePath = __dirname + "/../public/images/" + fileUrl;
-  file.mv(filePath, function (err) {
-    if (err) resp.status(500).send(err);
-    else {
-      User.updateOne({ _id: user._id }, { $set: { profilePicture: fileUrl } })
-        .then((done) => {
-          resp.status(200).send({ message: "file uploaded", profilePicture: fileUrl });
-        })
-        .catch((error) => {
-          resp.status(500).send(error);
-        });
-    }
-  });*/
 };
 
 
