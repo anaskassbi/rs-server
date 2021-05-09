@@ -219,7 +219,7 @@ exports.getFollowedUsers = async (req, resp) => {
 
     const followedUsersAcounts = await Promise.all(teamsMemberShips.flatMap((t) => t).map(({ user_id }) => User.findById(user_id)));
 
-    const result = followedUsersAcounts.map(({ firstName, lastName, roles }, index) => ({
+    const result = followedUsersAcounts.map(({ firstName, lastName, roles,profilePicture }, index) => ({
       ...followedUsers[index]._doc,
       firstName,
       lastName,
