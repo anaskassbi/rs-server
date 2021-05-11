@@ -45,6 +45,14 @@ router.post(
   "/update-citation",UserController.updateCitation
 );
 
+router.post(
+  "/add-SJR",UserController.addSJR
+);
+
+router.post(
+  "/add-IF",UserController.addIF
+);
+
 router.put("/users", UserController.updateUser);
 
 router.get("/users/:_id", UserController.findUser);

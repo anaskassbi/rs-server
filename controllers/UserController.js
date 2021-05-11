@@ -378,6 +378,42 @@ exports.updateCitation = async (req, resp) => {
 
 
 
+
+exports.addSJR = async ( req, resp)=>{
+  const {id,IF,SJR,title } = req.body;
+  
+  try{
+    const response = await FollowedUser.updateOne({user_id:id, "publications.title":title},{$set:{"publications.$.SJR":SJR,"publications.$.searchedFor":true,"publications.$.IF":IF}});
+    console.log("=====================================")
+    console.log(response);
+    resp.status(200).send(response);
+  }catch(error){
+    console.log(error);
+    resp.status(500).send(error);
+  }
+}
+
+
+
+exports.addIF = async ( req, resp)=>{
+  const {id,IF,title } = req.body;
+  
+  try{
+    const response = await FollowedUser.updateOne({user_id:id, "publications.title":title},{$set:{"publications.$.IF":IF}});
+    console.log("=====================================")
+    console.log(response);
+    resp.status(200).send(response);
+  }catch(error){
+    console.log(error);
+    resp.status(500).send(error);
+  }
+}
+
+
+
+
+
+
 exports.getFilteringOptions = async (req, resp) => {
   const user_id = req.params.laboratoryHeadId;
   let teams = [];
