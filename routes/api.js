@@ -11,6 +11,7 @@ const role = require("../helpers/role");
 const statisticsHelper = require("../helpers/statistics");
 const PhdStudentController = require("../controllers/PhdStudentController");
 const PvController = require("../controllers/PvController")
+const BudgetController = require("../controllers/BudgetController")
 const router = express.Router();
 
 
@@ -92,6 +93,9 @@ router.get(
   authorize([role.LABORATORY_HEAD]),
 );
 
+/******************Budget History********************/
+router.post("/addBudgetHistory",BudgetController.createBudgetHistory)
+router.get("/findHistory/:laboratory_id", BudgetController.findHistory);
 
 /**************** Followed users endpoints  ********/
 
