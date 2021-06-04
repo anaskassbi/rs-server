@@ -13,7 +13,97 @@ const PhdStudentController = require("../controllers/PhdStudentController");
 const PvController = require("../controllers/PvController")
 const BudgetController = require("../controllers/BudgetController")
 const router = express.Router();
+const GalerieController = require("../controllers/GalerieController")
+const MotController = require("../controllers/MotController");
+const ProjetController = require("../controllers/ProjetController");
 
+
+/************* Mots endpoints ***********/
+
+router.post("/mots",
+  authorize([role.LABORATORY_HEAD]),
+  MotController.createMot
+);
+
+router.put(
+  "/mots",
+  authorize([role.LABORATORY_HEAD]),
+  MotController.updateMot
+);
+
+router.get(
+  "/mots/:_id",
+  authorize([role.LABORATORY_HEAD]),
+  MotController.findMot
+);
+
+router.get(
+  "/mots",
+  authorize([role.LABORATORY_HEAD]),
+  MotController.findAllMots
+);
+
+router.get(
+  "/motsLab",
+  authorize([role.LABORATORY_HEAD]),
+  MotController.getMotsByLab
+);
+
+router.delete(
+  "/mots/:_id",
+  authorize([role.LABORATORY_HEAD]),
+  MotController.deleteMot
+);
+
+
+
+/************* Projets endpoints ***********/
+
+router.post(
+  "/projets",
+  authorize([role.LABORATORY_HEAD]),
+  ProjetController.createProjet
+);
+
+router.put(
+  "/projets",
+  authorize([role.LABORATORY_HEAD]),
+  ProjetController.updateProjet
+);
+
+router.get(
+  "/projets/:_id",
+  authorize([role.LABORATORY_HEAD]),
+  ProjetController.findProjet
+);
+
+router.get(
+  "/projets",
+  authorize([role.LABORATORY_HEAD]),
+  ProjetController.findAllProjets
+);
+
+router.get(
+  "/projetsLab",
+  authorize([role.LABORATORY_HEAD]),
+  ProjetController.getProjectsByLab
+);
+
+router.delete(
+  "/projets/:_id",
+  authorize([role.LABORATORY_HEAD]),
+  ProjetController.deleteProjet
+);
+
+
+/************Galerie endpoints********************/
+router.post("/galerie", GalerieController.createGalerie);
+router.get("/galerie/:_id", GalerieController.findAll);
+router.get("/galerie/doc/:_id/:_doc", GalerieController.findGalerie);
+router.delete("/galerie/:_id", GalerieController.deleteGalerie);
+router.post("/galerie/removeElement", GalerieController.removeElement)
+router.get("/galerie/findOne/:_id", GalerieController.findGalerieById)
+router.post("/galerie/pushFile", GalerieController.pushFile)
 
 
 
@@ -22,9 +112,9 @@ router.post("/pv", PvController.createPv);
 router.get("/pv/:_id", PvController.findAll);
 router.get("/pv/doc/:_id/:_doc", PvController.findPv);
 router.delete("/pv/:_id", PvController.deletePv);
-router.post("/pv/removeElement",PvController.removeElement)
-router.get("/pv/findOne/:_id",PvController.findPvById)
-router.post("/pv/pushFile",PvController.pushFile)
+router.post("/pv/removeElement", PvController.removeElement)
+router.get("/pv/findOne/:_id", PvController.findPvById)
+router.post("/pv/pushFile", PvController.pushFile)
 
 /************* Users endpoints ***********/
 router.get("/users/lab/:_id", UserController.findPhdStudentOfLab);
@@ -36,28 +126,28 @@ router.post(
 );
 
 router.post(
-  "/add-pub",UserController.addPub
+  "/add-pub", UserController.addPub
 );
 
 router.post(
-  "/delete-pub",UserController.deletePub
+  "/delete-pub", UserController.deletePub
 );
 router.post(
-  "/update-citation",UserController.updateCitation
-);
-
-router.post(
-  "/add-SJR",UserController.addSJR
+  "/update-citation", UserController.updateCitation
 );
 
 router.post(
-  "/add-IF",UserController.addIF
+  "/add-SJR", UserController.addSJR
+);
+
+router.post(
+  "/add-IF", UserController.addIF
 );
 
 router.put("/users", UserController.updateUser);
 
 router.get("/users/:_id", UserController.findUser);
-router.get("/labUsers/:labId",UserController.findAllUsersByLab)
+router.get("/labUsers/:labId", UserController.findAllUsersByLab)
 
 
 router.get(
@@ -94,7 +184,7 @@ router.get(
 );
 
 /******************Budget History********************/
-router.post("/addBudgetHistory",BudgetController.createBudgetHistory)
+router.post("/addBudgetHistory", BudgetController.createBudgetHistory)
 router.get("/findHistory/:laboratory_id", BudgetController.findHistory);
 
 /**************** Followed users endpoints  ********/
@@ -327,8 +417,8 @@ router.post(
 
 
 /***************** Phd students  endpoints **************/
-router.get("/phdStudentsLabs",PhdStudentController.findStudentsOfLab);
-router.get("/phdStudentsOfUser",PhdStudentController.findStudentsOfUser);
+router.get("/phdStudentsLabs", PhdStudentController.findStudentsOfLab);
+router.get("/phdStudentsOfUser", PhdStudentController.findStudentsOfUser);
 router.post(
   "/phdStudents",
   PhdStudentController.createPhdStudent

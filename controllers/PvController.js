@@ -1,7 +1,6 @@
 const Pv = require("../models/pv");
 require('../server.js');
 var mongoose = require('mongoose');
-const firebase = require('../helpers/firebase')
 
 exports.findAll = async (req, resp) => {
     try {
