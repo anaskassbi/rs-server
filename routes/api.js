@@ -130,6 +130,10 @@ router.post(
 );
 
 router.post(
+  "/update-pub",UserController.updatePub
+);
+
+router.post(
   "/delete-pub", UserController.deletePub
 );
 router.post(

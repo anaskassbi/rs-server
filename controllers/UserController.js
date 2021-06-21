@@ -333,6 +333,25 @@ exports.addPub = async (req, resp) => {
 
 
 
+exports.updatePub = async (req, resp) => {
+  const { idAuthor,_id, title, year, citation,authors,source, IF, SJR } = req.body;
+      console.log(req.body)
+
+  try {
+    
+
+    const response = await FollowedUser.updateOne({user_id:idAuthor, "publications.$._id":_id},{$set:{"publications.$.title":title,"publications.$.year":year,"publications.$.citation":citation,"publications.$.SJR":SJR,"publications.$.authors":authors,"publications.$.searchedFor":true,"publications.$.IF":IF,"publications.$.source":source}});
+    resp.status(200).send(response);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+    resp.status(500).send(error);
+  }
+}
+
+
+
+
 exports.deletePub = async (req, resp) => {
   const { idAuthor, idPub } = req.body;
 
